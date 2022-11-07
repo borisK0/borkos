@@ -3,11 +3,11 @@ services:
     web:
         build:
             context: .
-            dockerfile: dockerfile.web
+            dockerfile: Dockerfile.web
         ports:
             - 8080:80
         volumes:
-            - "/home/bobi/git/borkos/web:/var/www/html:ro"
+            - "${PROJECT_ROOT}:/var/www/html:ro"
         networks:
             - app-net
         depends_on:
@@ -15,11 +15,10 @@ services:
     db:
         build:
             context: .
-            dockerfile: dockerfile.db
+            dockerfile: Dockerfile.db
         networks:
             - app-net
         environment:
-            MYSQL_ROOT_PASSWORD: "12345"
+            MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
 networks:
   app-net:
-
