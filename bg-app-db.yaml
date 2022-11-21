@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bg-app-db-deployment
+  labels:
+    app: bg-app-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bg-app-db
+  template:
+    metadata:
+      labels:
+        app: bg-app-db
+    spec:
+      containers:
+      - name: bg-app-db
+        image: borisk0/bg-app-db
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MARIADB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: bg-app-secret
+              key: root-password  
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: db
+spec:
+  selector:
+    app: bg-app-db
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
